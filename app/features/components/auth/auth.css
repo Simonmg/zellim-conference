@@ -1,0 +1,32 @@
+.form-control {
+    background-color: #444A58 !important;
+    border: 1px solid #313643;
+    border-radius: 4px;
+}
+
+.form-control:focus {
+    border: 1px solid #898E9A !important;
+    outline: 0;
+    box-shadow: none !important;
+}
+
+.btn .btn-primary {
+    background-color: #1d72d8 !important;
+    color: white !important;
+}
+
+.zellim-input {
+    background: #444A58;
+    border: 1px solid #898E9A;
+    box-sizing: border-box;
+    border-radius: 4px;
+    height: 36px;
+    
+}
+
+.form-control {
+    color: #DFDFDF !important;
+}
+
+
+/* https://desktop.zellim.com/v1/auth/login */
