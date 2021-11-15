@@ -8,7 +8,7 @@ export default class Api {
 
     }
 
-    async login(email: string, passwordHash: BinaryLike) {
+    async login(email, passwordHash) {
         const request = await sendAuthRequest(
             `${defaultServerURL}/auth/login`,
             {
@@ -19,7 +19,7 @@ export default class Api {
             },
             false,
         );
-        if(!request?.ok) {
+        if(!request.ok) {
             console.error(request);
             const error = await request.json();
             return error;
@@ -29,7 +29,7 @@ export default class Api {
         return u;
     }
 
-    async getRomInfo(roomName: string, userToken: string) {
+    async getRomInfo(roomName, userToken) {
         const request = await getConferenceData(
             `${SERVER.REMOTE}${CONFERENCE_MODULE.GET_TOKEN}${roomName}`,
             {
@@ -42,7 +42,7 @@ export default class Api {
             false
         );
 
-        if(!request?.ok) {
+        if(!request.ok) {
             console.error(request);
             const error = await request.json();
             return error;

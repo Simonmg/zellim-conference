@@ -83,9 +83,8 @@ const handleMeetData = async data => {
     if (data.close) app.quit();
 };
 
-
 const meetURL = process.argv.filter(arg => arg.includes('zellim.us'));
-console.log(meetURL);
+console.log(`room url: ${meetURL}`);
 /**
  * Opens new window with index.html(Jitsi Meet is loaded in iframe there).
  */

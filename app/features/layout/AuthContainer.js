@@ -6,11 +6,8 @@ export default class AuthContainer extends Component {
     }
 
     render() {
-
-        const { meetUrl } = this.props;
-
         return(
-            <Auth roomUrl={meetUrl} />
+            <Auth />
         );
     }
 }

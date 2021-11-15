@@ -9,29 +9,31 @@ export default class Conference extends Component {
 
     _api;
 
+    state = {
+        containerId: 'meetContainer',
+        roomData: null,
+        token: this.props.token,
+        meetUrl: null,
+        roomInfoLoaded: false
+    }
+
     constructor(props) {
         super(props);
-        this.state = {
-            containerId: 'meetContainer',
-            roomData: null,
-            token: this.props.token,
-            meetUrl: this.props.meetUrl
-        }
-
+        this.loadListeners()
         this._api = new Api();
     }
 
-    componentDidMount() {
-        this.getRoomInfo(
-            this.state.meetUrl, 
-            this.state.token
-        ).then(data => this.setRoomData(data));
-    }
 
-    setRoomData(data) {
-        this.setState({
-            roomData: data
-        })
+    loadListeners() {
+        if (window.jitsiNodeAPI.ipc) {
+            window.jitsiNodeAPI.ipc.send('renderer-ready', {load: true});
+            window.jitsiNodeAPI.ipc.on('protocol-data-msg',
+                (event, data) => {
+                    this.setState({meetUrl: data.meetURL[0]});
+                    const { meetUrl, token } = this.state;
+                    this.setRoomInfo(meetUrl, token);
+                });
+        }
     }
 
 
@@ -50,11 +52,9 @@ export default class Conference extends Component {
         return loadJitsiScriptPromise;
     }
 
-    async getRoomInfo(roomUrl, token) {
-        return await this._api.getRomInfo(
-            this.getRoomFromURL(roomUrl),
-            token
-        );
+    async setRoomInfo(roomUrl, token) {
+        const roomInfo = await this._api.getRomInfo(this.getRoomFromURL(roomUrl), token);
+        this.setState({ roomInfo, roomInfoLoaded: true });
     }
 
     async startConference(userToken, meetUrl) {
@@ -109,38 +109,35 @@ export default class Conference extends Component {
         return url.split(".")[0].replace("https://", "");
     }
 
+    renderConference() {
+        if ((this.state.roomInfo && this.state.roomInfo.moderator) || 
+            (this.state.roomInfo && !this.state.roomInfo.moderator && this.state.roomInfo.roomInfo.open)) 
+        {
+            const { meetUrl, token } = this.state;
+            this.startConference(token, meetUrl);
+            return (
+                <div id={this.state.containerId} className="meet-container"></div>
+            )
+        } 
+        else {
+            return (
+                <div className="d-flex margin-auto justify-content-center w-100 h-100">
+                    <div className="d-flex flex-column justify-content-center m-auto">
+                        <ZellimLogo height={128} width={128} />
+                        <h3 className="text-white text-center mt-4">Room Closed</h3>
+                    </div>
+                </div>
+            )
+        }
+    }
+
 
     render() {
-
-        const {
-            token,
-            meetUrl
-        } = this.props;
-        
-        console.log(this.state);
-        let render;
-
-        if (this.state.roomData && this.state.roomData.moderator) {
-            this.startConference(token, meetUrl);
-            render = <div id={this.state.containerId} className="meet-container"></div>
-        } else if (this.state.roomData?.roomInfo?.open) {
-            this.startConference(token, meetUrl);
-            render = <div id={this.state.containerId} className="meet-container"></div>
-        } else {
-            render = <div className="d-flex margin-auto justify-content-center w-100 h-100">
-                        <div className="d-flex flex-column justify-content-center m-auto">
-                            <ZellimLogo height={128} width={128} />
-                            <h3 className="text-white text-center mt-4">Room Closed</h3>
-                        </div>
-                     </div>
-        };
-
         return(
             <>
-                { render }
+                { this.renderConference() }
             </>
         )
-       
     }
 
 }

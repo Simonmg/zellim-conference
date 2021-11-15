@@ -7,9 +7,9 @@ export default class ConferenceContainer extends Component {
     }
 
     render() {
-        const { token, meetUrl } = this.props;
+        const { token } = this.props;
         return(
-            <Conference token={token} meetUrl={meetUrl} />
+            <Conference token={token}/>
         );
    }
 }

@@ -70,14 +70,10 @@ export default class Auth extends Component {
     }
 
     render() {
-
-        const { roomUrl } = this.props;
-
         return(
             this.state.zlmToken ? (
                 <ConferenceContainer 
                     token={ this.state.zlmToken }
-                    meetUrl={ roomUrl } 
                 />
             ) : (
                 <div className="d-flex margin-auto justify-content-center w-100 h-100">

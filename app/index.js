@@ -15,22 +15,9 @@ import AuthContainer from './features/layout/AuthContainer';
 
 class Root extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            meetUrl: null,
-            token: null
-        }
-
-        this.loadListeners();
-    }
-
-    loadListeners() {
-        if (window.jitsiNodeAPI.ipc) {
-            window.jitsiNodeAPI.ipc.send('renderer-ready', {load: true});
-            window.jitsiNodeAPI.ipc.on('protocol-data-msg', 
-                (event, data) => this.setState({meetUrl: data.meetURL[0]}));
-        }
+    state = {
+        token: null,
+        meetUrl: null
     }
 
     componentDidMount() {
@@ -43,16 +30,14 @@ class Root extends Component {
 
 
     render() {
+        const { token } = this.state;
         return (
-            this.state.token && this.state.meetUrl ? (
+            token ? (
                 <ConferenceContainer 
-                    token={this.state.token}
-                    meetUrl={this.state.meetUrl} 
+                    token={token}
                 />
             ) : (
-                <AuthContainer 
-                    meetUrl={this.state.meetUrl} 
-                />
+                <AuthContainer />
             )
         )
     }

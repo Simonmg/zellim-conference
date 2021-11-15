@@ -11,7 +11,7 @@
     ]
   },
   "scripts": {
-    "start": "webpack --config ./webpack.main.js --mode development && concurrently \"npm:watch\" \"electron ./build/main.js https://simon.zellim.us\"",
+    "start": "webpack --config ./webpack.main.js --mode development && concurrently \"npm:watch\" \"electron ./build/main.js\"",
     "start:electron": "webpack --config ./webpack.main.js --mode development && concurrently \"electron ./build/main.js\"",
     "clean": "rm -rf build dist",
     "lint": "eslint . && flow",
