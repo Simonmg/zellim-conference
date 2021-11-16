@@ -29,7 +29,7 @@
   },
   "build": {
     "appId": "com.zellim.desktop.conference",
-    "productName": "Zellim Conference",
+    "productName": "zellim-conference",
     "generateUpdatesFilesForAllChannels": false,
     "asarUnpack": [
       "app",
